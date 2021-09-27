@@ -6,14 +6,16 @@ Created on 9/26/2021
 
 @expected output:
 
-"春美冰菓室" 的地址為 : 臺北市松山區敦化北路120巷54號
+"春美冰菓室" 的地址為 : 台北市松山區敦化北路120巷54號
 "兄弟大飯店" 的地址為 : 台北市南京東路三段255號
 "大潤發中崙店" 的地址為 : 台北市中山區八德路二段306號B2
 "台北小巨蛋" 的地址為 : 臺北市松山區南京東路4段2號
 "微風南京" 的地址為 : 台北市松山區南京東路三段337號
 "星巴克北寧門市" 的地址為 : 台北市松山區南京東路四段56號1樓
-"敦化國中" 的地址為 : 臺北市南京東路三段
+"敦化國中" 的地址為 : [106]臺北市大安區龍淵里和平東路2段94號
 "林東芳牛肉麵" 的地址為 : 台北市中山區八德路二段322號
+"陶然亭餐廳" 的地址為 : 台北市松山鎮復興北路86號
+"文華東方酒店" 的地址為 : 台北市松山區敦化北路158號
 """
 
 import re
@@ -27,7 +29,10 @@ search_url = "https://api.bing.microsoft.com/v7.0/search"
 
 headers = {'Ocp-Apim-Subscription-Key': _key}
 
-queries = ["春美冰菓室", "兄弟大飯店", "大潤發中崙店", "台北小巨蛋", "微風南京", "星巴克北寧門市", "敦化國中", "林東芳牛肉麵"]
+queries = ["春美冰菓室", "兄弟大飯店", "大潤發中崙店", "台北小巨蛋", "微風南京", "星巴克北寧門市", "敦化國中", "林東芳牛肉麵", "陶然亭餐廳", "文華東方酒店"]
+
+def containsNumber(value):
+    return any([char.isdigit() for char in value])
 
 for q in queries:
     query = q + " 地址"
@@ -41,7 +46,7 @@ for q in queries:
                 if j == "snippet":
                     for s in i[j].split("，"):
                         for i in s.split():
-                            if "路" in i and "市" in i and i[i.index("路")-1] != "網":
+                            if "路" in i and "市" in i and i[i.index("路")-1] != "網" and containsNumber(i):
                                 address = re.split('：',i)[-1]
                                 address = re.split(':',address)[-1]
                                 characters_to_remove = ",.。"
